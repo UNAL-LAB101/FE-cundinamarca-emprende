@@ -20,7 +20,7 @@ export class LoginComponent {
     if (success) {
       const apiKey = this.authService.getApiKey();
       console.log('API Key:', apiKey);
-      this.router.navigate(['/form']);
+      this.router.navigate(['/dashboardSelector']);
     } else {
       alert('Credenciales inválidas');
     }

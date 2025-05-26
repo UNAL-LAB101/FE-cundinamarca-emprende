@@ -9,8 +9,8 @@
 
 <div class="container bg-white p-4 rounded shadow">
   <!-- Mensaje de respuesta del servidor -->
-  <div *ngIf="serverResponse" class="alert alert-dismissible fade show" 
-       [ngClass]="serverResponse.success ? 'alert-success' : 'alert-danger'">
+  <div *ngIf="serverResponse" class="alert alert-dismissible fade show"
+    [ngClass]="serverResponse.success ? 'alert-success' : 'alert-danger'">
     {{serverResponse.message}}
     <button type="button" class="btn-close" (click)="serverResponse = null"></button>
   </div>
@@ -18,33 +18,21 @@
   <h2 class="text-center mb-4 text-primary fw-bold">
     <i class="bi bi-file-earmark-text me-2"></i>Formulario de Caracterización
   </h2>
-  
+
   <form [formGroup]="form" (ngSubmit)="submitForm()" class="needs-validation" novalidate>
     <!-- Progress Steps -->
-    <div class="mb-5">
-      <ul class="nav nav-pills nav-justified">
-        <li class="nav-item">
-          <a class="nav-link" [ngClass]="{'active': true}" href="#basic-info">
-            <i class="bi bi-person-vcard me-1"></i> Información Básica
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#contact-info">
-            <i class="bi bi-telephone me-1"></i> Contacto
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#business-info">
-            <i class="bi bi-building me-1"></i> Negocio
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#financial-info">
-            <i class="bi bi-cash-coin me-1"></i> Financiero
-          </a>
-        </li>
-      </ul>
-    </div>
+<div class="mb-5">
+  <ul class="nav nav-pills nav-justified">
+    <li class="nav-item" *ngFor="let section of sections">
+      <a class="nav-link"
+         [ngClass]="{'active': activeSection === section.id}"
+         href="javascript:void(0)"
+         (click)="scrollTo(section.id); $event.preventDefault()">  <!-- Previene comportamiento por defecto -->
+        <i class="bi {{section.icon}} me-1"></i> {{section.title}}
+      </a>
+    </li>
+  </ul>
+</div>
 
     <!-- Basic Information Section -->
     <div class="form-section mb-5" id="basic-info">
@@ -58,18 +46,16 @@
           <div class="row mb-3">
             <div class="col-md-6 mb-3">
               <label for="companyName" class="form-label">Nombre de la empresa:</label>
-              <input type="text" class="form-control" id="companyName" 
-                     formControlName="companyName"
-                     [ngClass]="{'is-invalid': submitted && f['companyName'].errors}">
+              <input type="text" class="form-control" id="companyName" formControlName="companyName"
+                [ngClass]="{'is-invalid': submitted && f['companyName'].errors}">
               <div *ngIf="submitted && f['companyName'].errors" class="invalid-feedback">
                 {{ getFieldError('companyName') }}
               </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="naturalPerson" class="form-label">Nombre de la persona natural:</label>
-              <input type="text" class="form-control" id="naturalPerson" 
-                     formControlName="naturalPerson"
-                     [ngClass]="{'is-invalid': submitted && f['naturalPerson'].errors}">
+              <input type="text" class="form-control" id="naturalPerson" formControlName="naturalPerson"
+                [ngClass]="{'is-invalid': submitted && f['naturalPerson'].errors}">
               <div *ngIf="submitted && f['naturalPerson'].errors" class="invalid-feedback">
                 {{ getFieldError('naturalPerson') }}
               </div>
@@ -79,18 +65,16 @@
           <div class="row mb-3">
             <div class="col-md-6 mb-3">
               <label for="municipality" class="form-label">Municipio:</label>
-              <input type="text" class="form-control" id="municipality" 
-                     formControlName="municipality"
-                     [ngClass]="{'is-invalid': submitted && f['municipality'].errors}">
+              <input type="text" class="form-control" id="municipality" formControlName="municipality"
+                [ngClass]="{'is-invalid': submitted && f['municipality'].errors}">
               <div *ngIf="submitted && f['municipality'].errors" class="invalid-feedback">
                 {{ getFieldError('municipality') }}
               </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="meetingDate" class="form-label">Fecha de encuentro:</label>
-              <input type="date" class="form-control" id="meetingDate" 
-                     formControlName="meetingDate"
-                     [ngClass]="{'is-invalid': submitted && f['meetingDate'].errors}">
+              <input type="date" class="form-control" id="meetingDate" formControlName="meetingDate"
+                [ngClass]="{'is-invalid': submitted && f['meetingDate'].errors}">
               <div *ngIf="submitted && f['meetingDate'].errors" class="invalid-feedback">
                 {{ getFieldError('meetingDate') }}
               </div>
@@ -112,57 +96,50 @@
           <div class="row mb-3">
             <div class="col-md-6 mb-3">
               <label for="email" class="form-label">Correo Electrónico:</label>
-              <input type="email" class="form-control" id="email" 
-                     formControlName="email"
-                     [ngClass]="{'is-invalid': submitted && f['email'].errors}">
+              <input type="email" class="form-control" id="email" formControlName="email"
+                [ngClass]="{'is-invalid': submitted && f['email'].errors}">
               <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
                 {{ getFieldError('email') }}
               </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="phone" class="form-label">Número de Contacto:</label>
-              <input type="tel" class="form-control" id="phone" 
-                     formControlName="phone"
-                     [ngClass]="{'is-invalid': submitted && f['phone'].errors}">
+              <input type="tel" class="form-control" id="phone" formControlName="phone"
+                [ngClass]="{'is-invalid': submitted && f['phone'].errors}">
               <div *ngIf="submitted && f['phone'].errors" class="invalid-feedback">
                 {{ getFieldError('phone') }}
               </div>
             </div>
           </div>
-          
+
           <div class="mb-3">
             <label for="address" class="form-label">Dirección:</label>
-            <input type="text" class="form-control" id="address" 
-                   formControlName="address"
-                   [ngClass]="{'is-invalid': submitted && f['address'].errors}">
+            <input type="text" class="form-control" id="address" formControlName="address"
+              [ngClass]="{'is-invalid': submitted && f['address'].errors}">
             <div *ngIf="submitted && f['address'].errors" class="invalid-feedback">
               {{ getFieldError('address') }}
             </div>
           </div>
-          
+
           <div class="mb-3">
             <label for="responsible" class="form-label">Responsable del fortalecimiento:</label>
-            <input type="text" class="form-control" id="responsible" 
-                   formControlName="responsible"
-                   [ngClass]="{'is-invalid': submitted && f['responsible'].errors}">
+            <input type="text" class="form-control" id="responsible" formControlName="responsible"
+              [ngClass]="{'is-invalid': submitted && f['responsible'].errors}">
             <div *ngIf="submitted && f['responsible'].errors" class="invalid-feedback">
               {{ getFieldError('responsible') }}
             </div>
           </div>
-          
+
           <div class="mb-3">
             <label class="form-label">Sexo:</label>
             <div class="btn-group" role="group">
-              <input type="radio" class="btn-check" id="genderMujer" value="Mujer" 
-                     formControlName="gender">
+              <input type="radio" class="btn-check" id="genderMujer" value="Mujer" formControlName="gender">
               <label class="btn btn-outline-primary" for="genderMujer">Mujer</label>
-              
-              <input type="radio" class="btn-check" id="genderHombre" value="Hombre" 
-                     formControlName="gender">
+
+              <input type="radio" class="btn-check" id="genderHombre" value="Hombre" formControlName="gender">
               <label class="btn btn-outline-primary" for="genderHombre">Hombre</label>
-              
-              <input type="radio" class="btn-check" id="genderOtro" value="Otro" 
-                     formControlName="gender">
+
+              <input type="radio" class="btn-check" id="genderOtro" value="Otro" formControlName="gender">
               <label class="btn btn-outline-primary" for="genderOtro">Otro</label>
             </div>
             <div *ngIf="submitted && f['gender'].errors" class="text-danger small">
@@ -187,10 +164,9 @@
             <div class="row">
               <div class="col-md-4 mb-2" *ngFor="let option of businessTypeOptions">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [value]="option" 
-                         (change)="onCheckboxChange($event, 'businessType', option)"
-                         [checked]="businessTypeArray.value.includes(option)"
-                         id="bt-{{option}}">
+                  <input class="form-check-input" type="checkbox" [value]="option"
+                    (change)="onCheckboxChange($event, 'businessType', option)"
+                    [checked]="businessTypeArray.value.includes(option)" id="bt-{{option}}">
                   <label class="form-check-label" for="bt-{{option}}">
                     {{option}}
                   </label>
@@ -201,8 +177,7 @@
               {{ getArrayError('businessType') }}
             </div>
             <div *ngIf="businessTypeArray.value.includes('Otra')" class="mt-3">
-              <input type="text" class="form-control" placeholder="¿Cuál?" 
-                     formControlName="otherBusinessType">
+              <input type="text" class="form-control" placeholder="¿Cuál?" formControlName="otherBusinessType">
             </div>
           </div>
         </div>
@@ -223,10 +198,9 @@
             <div class="row">
               <div class="col-md-4 mb-2" *ngFor="let option of economicSectorOptions">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [value]="option" 
-                         (change)="onCheckboxChange($event, 'economicSector', option)"
-                         [checked]="economicSectorArray.value.includes(option)"
-                         id="es-{{option}}">
+                  <input class="form-check-input" type="checkbox" [value]="option"
+                    (change)="onCheckboxChange($event, 'economicSector', option)"
+                    [checked]="economicSectorArray.value.includes(option)" id="es-{{option}}">
                   <label class="form-check-label" for="es-{{option}}">
                     {{option}}
                   </label>
@@ -237,8 +211,7 @@
               {{ getArrayError('economicSector') }}
             </div>
             <div *ngIf="economicSectorArray.value.includes('Otra')" class="mt-3">
-              <input type="text" class="form-control" placeholder="¿Cuál?" 
-                     formControlName="otherEconomicSector">
+              <input type="text" class="form-control" placeholder="¿Cuál?" formControlName="otherEconomicSector">
             </div>
           </div>
 
@@ -247,10 +220,9 @@
             <div class="row">
               <div class="col-md-4 mb-2" *ngFor="let option of economicActivityOptions">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [value]="option" 
-                         (change)="onCheckboxChange($event, 'economicActivity', option)"
-                         [checked]="economicActivityArray.value.includes(option)"
-                         id="ea-{{option}}">
+                  <input class="form-check-input" type="checkbox" [value]="option"
+                    (change)="onCheckboxChange($event, 'economicActivity', option)"
+                    [checked]="economicActivityArray.value.includes(option)" id="ea-{{option}}">
                   <label class="form-check-label" for="ea-{{option}}">
                     {{option}}
                   </label>
@@ -261,8 +233,7 @@
               {{ getArrayError('economicActivity') }}
             </div>
             <div *ngIf="economicActivityArray.value.includes('Otra')" class="mt-3">
-              <input type="text" class="form-control" placeholder="¿Cuál?" 
-                     formControlName="otherEconomicActivity">
+              <input type="text" class="form-control" placeholder="¿Cuál?" formControlName="otherEconomicActivity">
             </div>
           </div>
         </div>
@@ -281,18 +252,16 @@
           <div class="row mb-3">
             <div class="col-md-6 mb-3">
               <label for="membersCount" class="form-label">Número de afiliados / socios:</label>
-              <input type="number" class="form-control" id="membersCount" 
-                     formControlName="membersCount"
-                     [ngClass]="{'is-invalid': submitted && f['membersCount'].errors}">
+              <input type="number" class="form-control" id="membersCount" formControlName="membersCount"
+                [ngClass]="{'is-invalid': submitted && f['membersCount'].errors}">
               <div *ngIf="submitted && f['membersCount'].errors" class="invalid-feedback">
                 {{ getFieldError('membersCount') }}
               </div>
             </div>
             <div class="col-md-6 mb-3">
               <label for="differentialMembers" class="form-label">Socios con enfoque diferencial:</label>
-              <input type="number" class="form-control" id="differentialMembers" 
-                     formControlName="differentialMembers"
-                     [ngClass]="{'is-invalid': submitted && f['differentialMembers'].errors}">
+              <input type="number" class="form-control" id="differentialMembers" formControlName="differentialMembers"
+                [ngClass]="{'is-invalid': submitted && f['differentialMembers'].errors}">
               <div *ngIf="submitted && f['differentialMembers'].errors" class="invalid-feedback">
                 {{ getFieldError('differentialMembers') }}
               </div>
@@ -303,10 +272,9 @@
             <div class="row">
               <div class="col-md-4 mb-2" *ngFor="let option of differentialFocusOptions">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [value]="option" 
-                         (change)="onCheckboxChange($event, 'differentialFocus', option)"
-                         [checked]="differentialFocusArray.value.includes(option)"
-                         id="df-{{option}}">
+                  <input class="form-check-input" type="checkbox" [value]="option"
+                    (change)="onCheckboxChange($event, 'differentialFocus', option)"
+                    [checked]="differentialFocusArray.value.includes(option)" id="df-{{option}}">
                   <label class="form-check-label" for="df-{{option}}">
                     {{option}}
                   </label>
@@ -314,101 +282,95 @@
               </div>
             </div>
             <div *ngIf="differentialFocusArray.value.includes('Otra')" class="mt-3">
-              <input type="text" class="form-control" placeholder="¿Cuál?" 
-                     formControlName="otherDifferentialFocus">
+              <input type="text" class="form-control" placeholder="¿Cuál?" formControlName="otherDifferentialFocus">
             </div>
           </div>
         </div>
       </div>
     </div>
 
-<!-- Infrastructure -->
-<div class="form-section mb-5">
-  <div class="card border-primary">
-    <div class="card-header bg-primary text-white">
-      <h4 class="mb-0">
-        <i class="bi bi-house-gear me-2"></i>Infraestructura e Instalaciones
-      </h4>
-    </div>
-    <div class="card-body">
-      <div class="mb-4">
-        <label class="form-label">Tipo de infraestructura:</label>
-        <div class="row">
-          <div class="col-md-3 mb-2" *ngFor="let option of infrastructureTypeOptions">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" [value]="option" 
-                     (change)="onCheckboxChange($event, 'infrastructureType', option)"
-                     [checked]="infrastructureTypeArray.value.includes(option)"
-                     id="it-{{option}}">
-              <label class="form-check-label" for="it-{{option}}">
-                {{option}}
-              </label>
+    <!-- Infrastructure -->
+    <div class="form-section mb-5">
+      <div class="card border-primary">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-house-gear me-2"></i>Infraestructura e Instalaciones
+          </h4>
+        </div>
+        <div class="card-body">
+          <div class="mb-4">
+            <label class="form-label">Tipo de infraestructura:</label>
+            <div class="row">
+              <div class="col-md-3 mb-2" *ngFor="let option of infrastructureTypeOptions">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" [value]="option"
+                    (change)="onCheckboxChange($event, 'infrastructureType', option)"
+                    [checked]="infrastructureTypeArray.value.includes(option)" id="it-{{option}}">
+                  <label class="form-check-label" for="it-{{option}}">
+                    {{option}}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="submitted && infrastructureTypeArray.errors" class="text-danger small">
+              {{ getArrayError('infrastructureType') }}
+            </div>
+            <div class="mt-3 col-md-4">
+              <label for="area" class="form-label">Área (m²):</label>
+              <input type="number" class="form-control" id="area" formControlName="area"
+                [ngClass]="{'is-invalid': submitted && f['area'].errors}">
+              <div *ngIf="submitted && f['area'].errors" class="invalid-feedback">
+                {{ getFieldError('area') }}
+              </div>
             </div>
           </div>
-        </div>
-        <div *ngIf="submitted && infrastructureTypeArray.errors" class="text-danger small">
-          {{ getArrayError('infrastructureType') }}
-        </div>
-        <div class="mt-3 col-md-4">
-          <label for="area" class="form-label">Área (m²):</label>
-          <input type="number" class="form-control" id="area" 
-                 formControlName="area"
-                 [ngClass]="{'is-invalid': submitted && f['area'].errors}">
-          <div *ngIf="submitted && f['area'].errors" class="invalid-feedback">
-            {{ getFieldError('area') }}
-          </div>
-        </div>
-      </div>
 
-      <!-- Nueva sección de Aliados Comerciales -->
-      <div class="mb-3">
-        <label class="form-label">Aliados comerciales:</label>
-        
-        <!-- Públicos -->
-        <div class="mb-3">
-          <div class="d-flex align-items-center mb-2">
-            <div class="form-check me-3">
-              <input class="form-check-input" type="checkbox" id="hasPublicPartners" 
-                     formControlName="hasPublicPartners">
-              <label class="form-check-label fw-bold" for="hasPublicPartners">Públicos</label>
+          <!-- Nueva sección de Aliados Comerciales -->
+          <div class="mb-3">
+            <label class="form-label">Aliados comerciales:</label>
+
+            <!-- Públicos -->
+            <div class="mb-3">
+              <div class="d-flex align-items-center mb-2">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="hasPublicPartners"
+                    formControlName="hasPublicPartners">
+                  <label class="form-check-label fw-bold" for="hasPublicPartners">Públicos</label>
+                </div>
+                <input *ngIf="f['hasPublicPartners'].value" type="text" class="form-control w-50"
+                  placeholder="¿Cuáles? Ej: Venta Directa" formControlName="publicPartners">
+              </div>
             </div>
-            <input *ngIf="f['hasPublicPartners'].value" type="text" class="form-control w-50" 
-                   placeholder="¿Cuáles? Ej: Venta Directa"
-                   formControlName="publicPartners">
-          </div>
-        </div>
-        
-        <!-- Privados -->
-        <div class="mb-3">
-          <div class="d-flex align-items-center mb-2">
-            <div class="form-check me-3">
-              <input class="form-check-input" type="checkbox" id="hasPrivatePartners" 
-                     formControlName="hasPrivatePartners">
-              <label class="form-check-label fw-bold" for="hasPrivatePartners">Privados</label>
+
+            <!-- Privados -->
+            <div class="mb-3">
+              <div class="d-flex align-items-center mb-2">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="hasPrivatePartners"
+                    formControlName="hasPrivatePartners">
+                  <label class="form-check-label fw-bold" for="hasPrivatePartners">Privados</label>
+                </div>
+                <input *ngIf="f['hasPrivatePartners'].value" type="text" class="form-control w-50"
+                  placeholder="¿Cuáles?" formControlName="privatePartners">
+              </div>
             </div>
-            <input *ngIf="f['hasPrivatePartners'].value" type="text" class="form-control w-50" 
-                   placeholder="¿Cuáles?"
-                   formControlName="privatePartners">
-          </div>
-        </div>
-        
-        <!-- Mixto -->
-        <div class="mb-3">
-          <div class="d-flex align-items-center mb-2">
-            <div class="form-check me-3">
-              <input class="form-check-input" type="checkbox" id="hasMixedPartners" 
-                     formControlName="hasMixedPartners">
-              <label class="form-check-label fw-bold" for="hasMixedPartners">Mixto</label>
+
+            <!-- Mixto -->
+            <div class="mb-3">
+              <div class="d-flex align-items-center mb-2">
+                <div class="form-check me-3">
+                  <input class="form-check-input" type="checkbox" id="hasMixedPartners"
+                    formControlName="hasMixedPartners">
+                  <label class="form-check-label fw-bold" for="hasMixedPartners">Mixto</label>
+                </div>
+                <input *ngIf="f['hasMixedPartners'].value" type="text" class="form-control w-50" placeholder="¿Cuáles?"
+                  formControlName="mixedPartners">
+              </div>
             </div>
-            <input *ngIf="f['hasMixedPartners'].value" type="text" class="form-control w-50" 
-                   placeholder="¿Cuáles?"
-                   formControlName="mixedPartners">
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
     <!-- Financial Information -->
     <div class="form-section mb-5" id="financial-info">
@@ -424,9 +386,8 @@
               <label for="workingCapital" class="form-label">Capital de Trabajo:</label>
               <div class="input-group">
                 <span class="input-group-text">$</span>
-                <input type="number" class="form-control" id="workingCapital" 
-                       formControlName="workingCapital"
-                       [ngClass]="{'is-invalid': submitted && f['workingCapital'].errors}">
+                <input type="number" class="form-control" id="workingCapital" formControlName="workingCapital"
+                  [ngClass]="{'is-invalid': submitted && f['workingCapital'].errors}">
               </div>
               <div *ngIf="submitted && f['workingCapital'].errors" class="invalid-feedback">
                 {{ getFieldError('workingCapital') }}
@@ -436,9 +397,8 @@
               <label for="entityDebt" class="form-label">Pasivo de la entidad:</label>
               <div class="input-group">
                 <span class="input-group-text">$</span>
-                <input type="number" class="form-control" id="entityDebt" 
-                       formControlName="entityDebt"
-                       [ngClass]="{'is-invalid': submitted && f['entityDebt'].errors}">
+                <input type="number" class="form-control" id="entityDebt" formControlName="entityDebt"
+                  [ngClass]="{'is-invalid': submitted && f['entityDebt'].errors}">
               </div>
               <div *ngIf="submitted && f['entityDebt'].errors" class="invalid-feedback">
                 {{ getFieldError('entityDebt') }}
@@ -448,12 +408,10 @@
           <div class="mb-3">
             <label class="form-label">¿Tiene Créditos?</label>
             <div class="btn-group" role="group">
-              <input type="radio" class="btn-check" id="hasCreditsSi" value="Si" 
-                     formControlName="hasCredits">
+              <input type="radio" class="btn-check" id="hasCreditsSi" value="Si" formControlName="hasCredits">
               <label class="btn btn-outline-primary" for="hasCreditsSi">Si</label>
-              
-              <input type="radio" class="btn-check" id="hasCreditsNo" value="No" 
-                     formControlName="hasCredits">
+
+              <input type="radio" class="btn-check" id="hasCreditsNo" value="No" formControlName="hasCredits">
               <label class="btn btn-outline-primary" for="hasCreditsNo">No</label>
             </div>
           </div>
@@ -472,45 +430,40 @@
         <div class="card-body">
           <div class="mb-3">
             <label for="motivation" class="form-label">¿Qué te motiva a ser emprendedor?</label>
-            <textarea class="form-control" id="motivation" rows="3" 
-                      formControlName="motivation"
-                      [ngClass]="{'is-invalid': submitted && f['motivation'].errors}"></textarea>
+            <textarea class="form-control" id="motivation" rows="3" formControlName="motivation"
+              [ngClass]="{'is-invalid': submitted && f['motivation'].errors}"></textarea>
             <div *ngIf="submitted && f['motivation'].errors" class="invalid-feedback">
               {{ getFieldError('motivation') }}
             </div>
           </div>
           <div class="mb-3">
             <label for="vision" class="form-label">¿Cómo visualizas tu vida como emprendedor?</label>
-            <textarea class="form-control" id="vision" rows="3" 
-                      formControlName="vision"
-                      [ngClass]="{'is-invalid': submitted && f['vision'].errors}"></textarea>
+            <textarea class="form-control" id="vision" rows="3" formControlName="vision"
+              [ngClass]="{'is-invalid': submitted && f['vision'].errors}"></textarea>
             <div *ngIf="submitted && f['vision'].errors" class="invalid-feedback">
               {{ getFieldError('vision') }}
             </div>
           </div>
           <div class="mb-3">
             <label for="fearsStrengths" class="form-label">¿Qué temores y fortalezas tienes sobre emprender?</label>
-            <textarea class="form-control" id="fearsStrengths" rows="3" 
-                      formControlName="fearsStrengths"
-                      [ngClass]="{'is-invalid': submitted && f['fearsStrengths'].errors}"></textarea>
+            <textarea class="form-control" id="fearsStrengths" rows="3" formControlName="fearsStrengths"
+              [ngClass]="{'is-invalid': submitted && f['fearsStrengths'].errors}"></textarea>
             <div *ngIf="submitted && f['fearsStrengths'].errors" class="invalid-feedback">
               {{ getFieldError('fearsStrengths') }}
             </div>
           </div>
           <div class="mb-3">
             <label class="form-label">Pertenece a un grupo poblacional diferencial:</label>
-            <input type="text" class="form-control" 
-                   formControlName="differentialGroup"
-                   [ngClass]="{'is-invalid': submitted && f['differentialGroup'].errors}">
+            <input type="text" class="form-control" formControlName="differentialGroup"
+              [ngClass]="{'is-invalid': submitted && f['differentialGroup'].errors}">
             <div *ngIf="submitted && f['differentialGroup'].errors" class="invalid-feedback">
               {{ getFieldError('differentialGroup') }}
             </div>
           </div>
           <div class="mb-3">
             <label for="weeklyTime" class="form-label">Tiempo semanal para el emprendimiento:</label>
-            <input type="text" class="form-control" id="weeklyTime" 
-                   formControlName="weeklyTime"
-                   [ngClass]="{'is-invalid': submitted && f['weeklyTime'].errors}">
+            <input type="text" class="form-control" id="weeklyTime" formControlName="weeklyTime"
+              [ngClass]="{'is-invalid': submitted && f['weeklyTime'].errors}">
             <div *ngIf="submitted && f['weeklyTime'].errors" class="invalid-feedback">
               {{ getFieldError('weeklyTime') }}
             </div>

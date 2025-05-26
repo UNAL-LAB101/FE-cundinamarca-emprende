@@ -138,10 +138,12 @@ export class FormContainerComponent implements OnInit {
   }
 
   async submitForm(): Promise<void> {
+    console.log("submitForm ejecutado");
     this.submitted = true;
     this.markAllAsTouched();
 
     if (this.form.valid) {
+      console.log("Formulario válido, enviando...");
       try {
         this.serverResponse = null;
         this.form.disable();
@@ -149,16 +151,17 @@ export class FormContainerComponent implements OnInit {
         // 1. Construimos el arreglo de campos personalizados para Redmine
         const customFields = buildRedmineCustomFields(this.form);
 
-        // 2. Armamos el payload para Redmine
-        const payload = {
-          issue: {
-            project_id: 'solicitudes-pruebas', // ID o nombre del proyecto (usa el string que ves en Postman)
-            tracker_id: 10,                    // ID del tipo de seguimiento (ej: Emprendimiento)
-            subject: 'Cundinamarca Emprendemos - Solicitud de Prueba 2',
-            description: 'Esta es una solicitud enviada desde el formulario del frontend.',
-            custom_fields: customFields
-          }
-        };
+            // 2. Armamos el payload para Redmine
+      const payload = {
+        issue: {
+          project_id: 'solicitudes-pruebas',
+          tracker_id: 10,
+          subject: this.form.get('companyName')?.value || 'Solicitud sin nombre de empresa',
+          description: 'Esta es una solicitud enviada desde el formulario del frontend.',
+          custom_fields: customFields
+        }
+      };
+
 
         // 3. Enviamos a Redmine
         console.log('Payload a enviar:', JSON.stringify(payload, null, 2));

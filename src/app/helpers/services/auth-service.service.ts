@@ -10,7 +10,8 @@ export class AuthService {
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   //Usar proxy para evitar CORS
-  private apiUrl = '/api/users/current.json';
+/*   private apiUrl = '/api/users/current.json'; */
+  private apiUrl = 'http://ec2-34-200-104-165.compute-1.amazonaws.com:53430/users/current.json';
 
   constructor(private http: HttpClient) {}
 
@@ -20,7 +21,7 @@ export class AuthService {
     'Authorization': `Basic ${auth}`
   });
 
-  return this.http.get<any>('/api/users/current.json', {
+  return this.http.get<any>(this.apiUrl, {
     headers,
     withCredentials: false
   }).pipe(

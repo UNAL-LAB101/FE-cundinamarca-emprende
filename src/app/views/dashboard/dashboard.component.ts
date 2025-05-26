@@ -1,19 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DashboardDataService } from '../../helpers/services/dashboard-data.service';
 import { Emprendimiento } from '../../models/emprendimiento.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NgxEchartsDirective, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
 import * as echarts from 'echarts';
 
 @Component({
   selector: 'app-dashboard',
-  standalone:true,
-  imports:[CommonModule,FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, NgxEchartsDirective],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  providers: [
+    {
+      provide: NGX_ECHARTS_CONFIG,
+      useValue: { 
+        echarts: () => import('echarts').then(m => m.default)
+      }
+    }
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent implements OnInit {
-   emprendimientos: Emprendimiento[] = [
+  emprendimientos: Emprendimiento[] = [
     {
       id: 1,
       nombre: 'Tienda Digital Bogotá',
@@ -75,11 +85,191 @@ export class DashboardComponent implements OnInit {
       nodo: 'Nodo Bogotá',
       tipoNegocio: 'Consultoría',
       actividadEconomica: 'Asesoría ambiental'
-    }
+    },
+    {
+  id: 6,
+  nombre: 'Panadería El Trigo de Oro',
+  provincia: 'Boyacá',
+  municipio: 'Tunja',
+  fase: 'Preincubación',
+  evaluacion: 2,
+  sector: 'Alimentos',
+  nodo: 'Nodo Boyacá',
+  tipoNegocio: 'Panadería artesanal',
+  actividadEconomica: 'Producción alimenticia'
+},
+{
+  id: 7,
+  nombre: 'Moda Urbana Barranquilla',
+  provincia: 'Atlántico',
+  municipio: 'Barranquilla',
+  fase: 'Incubación',
+  evaluacion: 4,
+  sector: 'Textil',
+  nodo: 'Nodo Caribe',
+  tipoNegocio: 'Confección de ropa',
+  actividadEconomica: 'Fabricación de prendas'
+},
+{
+  id: 8,
+  nombre: 'Agencia Digital Bucaramanga',
+  provincia: 'Santander',
+  municipio: 'Bucaramanga',
+  fase: 'Aceleración',
+  evaluacion: 5,
+  sector: 'Tecnología',
+  nodo: 'Nodo Santander',
+  tipoNegocio: 'Marketing digital',
+  actividadEconomica: 'Publicidad y medios'
+},
+{
+  id: 9,
+  nombre: 'Turismo Verde Amazonas',
+  provincia: 'Amazonas',
+  municipio: 'Leticia',
+  fase: 'Consolidación',
+  evaluacion: 3,
+  sector: 'Turismo',
+  nodo: 'Nodo Amazonía',
+  tipoNegocio: 'Ecoturismo',
+  actividadEconomica: 'Servicios turísticos'
+},
+{
+  id: 10,
+  nombre: 'Diseño Interior Popayán',
+  provincia: 'Cauca',
+  municipio: 'Popayán',
+  fase: 'Preincubación',
+  evaluacion: 2,
+  sector: 'Servicios',
+  nodo: 'Nodo Pacífico',
+  tipoNegocio: 'Diseño de espacios',
+  actividadEconomica: 'Diseño de interiores'
+},
+{
+  id: 11,
+  nombre: 'Huerta Urbana Neiva',
+  provincia: 'Huila',
+  municipio: 'Neiva',
+  fase: 'Incubación',
+  evaluacion: 3,
+  sector: 'Agroindustria',
+  nodo: 'Nodo Sur',
+  tipoNegocio: 'Agricultura urbana',
+  actividadEconomica: 'Producción agrícola'
+},
+{
+  id: 12,
+  nombre: 'Artesanías de Nariño',
+  provincia: 'Nariño',
+  municipio: 'Pasto',
+  fase: 'Consolidación',
+  evaluacion: 4,
+  sector: 'Artesanías',
+  nodo: 'Nodo Nariño',
+  tipoNegocio: 'Arte y decoración',
+  actividadEconomica: 'Elaboración artesanal'
+},
+{
+  id: 13,
+  nombre: 'Soluciones Energéticas Tunja',
+  provincia: 'Boyacá',
+  municipio: 'Tunja',
+  fase: 'Aceleración',
+  evaluacion: 5,
+  sector: 'Energía',
+  nodo: 'Nodo Boyacá',
+  tipoNegocio: 'Energías renovables',
+  actividadEconomica: 'Instalación de paneles solares'
+},
+{
+  id: 14,
+  nombre: 'Academia de Idiomas Manizales',
+  provincia: 'Caldas',
+  municipio: 'Manizales',
+  fase: 'Incubación',
+  evaluacion: 3,
+  sector: 'Educación',
+  nodo: 'Nodo Eje Cafetero',
+  tipoNegocio: 'Centro educativo',
+  actividadEconomica: 'Enseñanza de idiomas'
+},
+{
+  id: 15,
+  nombre: 'Floristería Virtual Cartagena',
+  provincia: 'Bolívar',
+  municipio: 'Cartagena',
+  fase: 'Preincubación',
+  evaluacion: 2,
+  sector: 'Comercio',
+  nodo: 'Nodo Caribe',
+  tipoNegocio: 'E-commerce floral',
+  actividadEconomica: 'Venta online de flores'
+},
+{
+  id: 16,
+  nombre: 'Tecnología Médica Armenia',
+  provincia: 'Quindío',
+  municipio: 'Armenia',
+  fase: 'Aceleración',
+  evaluacion: 5,
+  sector: 'Salud',
+  nodo: 'Nodo Eje Cafetero',
+  tipoNegocio: 'Dispositivos médicos',
+  actividadEconomica: 'Fabricación tecnológica'
+},
+{
+  id: 17,
+  nombre: 'Ropa Infantil Villavicencio',
+  provincia: 'Meta',
+  municipio: 'Villavicencio',
+  fase: 'Incubación',
+  evaluacion: 3,
+  sector: 'Textil',
+  nodo: 'Nodo Llanos',
+  tipoNegocio: 'Tienda de ropa',
+  actividadEconomica: 'Venta de prendas infantiles'
+},
+{
+  id: 18,
+  nombre: 'Creaciones Digitales Ibagué',
+  provincia: 'Tolima',
+  municipio: 'Ibagué',
+  fase: 'Consolidación',
+  evaluacion: 4,
+  sector: 'Diseño',
+  nodo: 'Nodo Tolima',
+  tipoNegocio: 'Diseño gráfico',
+  actividadEconomica: 'Servicios creativos'
+},
+{
+  id: 19,
+  nombre: 'App de Bienestar Pasto',
+  provincia: 'Nariño',
+  municipio: 'Pasto',
+  fase: 'Aceleración',
+  evaluacion: 5,
+  sector: 'Tecnología',
+  nodo: 'Nodo Nariño',
+  tipoNegocio: 'Aplicación móvil',
+  actividadEconomica: 'Desarrollo de software'
+},
+{
+  id: 20,
+  nombre: 'Productora Audiovisual Montería',
+  provincia: 'Córdoba',
+  municipio: 'Montería',
+  fase: 'Incubación',
+  evaluacion: 4,
+  sector: 'Cultura y entretenimiento',
+  nodo: 'Nodo Caribe',
+  tipoNegocio: 'Producción de video',
+  actividadEconomica: 'Servicios audiovisuales'
+}
+
   ];
 
-  emprendimientosFiltrados: Emprendimiento[] = [];
-  
+   emprendimientosFiltrados: Emprendimiento[] = [];
   filtros = {
     provincia: '',
     fase: '',
@@ -94,19 +284,51 @@ export class DashboardComponent implements OnInit {
   provincias: string[] = [];
   sectores: string[] = [];
   fases = ['Preincubación', 'Incubación', 'Aceleración', 'Consolidación'];
+  
+  provinciasLoaded = false;
+  sectoresLoaded = false;
 
   ngOnInit(): void {
     this.emprendimientosFiltrados = [...this.emprendimientos];
-    this.provincias = [...new Set(this.emprendimientos.map(e => e.provincia))];
-    this.sectores = [...new Set(this.emprendimientos.map(e => e.sector))];
     this.actualizarDatosGraficos();
+  }
+
+  loadProvincias(): void {
+    if (!this.provinciasLoaded) {
+      this.provincias = [...new Set(this.emprendimientos.map(e => e.provincia))];
+      this.provinciasLoaded = true;
+    }
+  }
+
+  loadSectores(): void {
+    if (!this.sectoresLoaded) {
+      this.sectores = [...new Set(this.emprendimientos.map(e => e.sector))];
+      this.sectoresLoaded = true;
+    }
+  }
+
+  // Funciones trackBy para optimización
+  trackByProvincia(index: number, provincia: string): string {
+    return provincia;
+  }
+
+  trackByFase(index: number, fase: string): string {
+    return fase;
+  }
+
+  trackBySector(index: number, sector: string): string {
+    return sector;
+  }
+
+  trackByEmprendimiento(index: number, emp: Emprendimiento): number {
+    return emp.id;
   }
 
   aplicarFiltros(): void {
     this.emprendimientosFiltrados = this.emprendimientos.filter(e => {
       return (!this.filtros.provincia || e.provincia === this.filtros.provincia) &&
-             (!this.filtros.fase || e.fase === this.filtros.fase) &&
-             (!this.filtros.sector || e.sector === this.filtros.sector);
+        (!this.filtros.fase || e.fase === this.filtros.fase) &&
+        (!this.filtros.sector || e.sector === this.filtros.sector);
     });
     this.actualizarDatosGraficos();
   }
@@ -119,10 +341,10 @@ export class DashboardComponent implements OnInit {
   }
 
   agruparPor(campo: keyof Emprendimiento): any[] {
-    const grupos: {[key: string]: number} = {};
-    
+    const grupos: { [key: string]: number } = {};
+
     this.emprendimientosFiltrados.forEach(e => {
-      const valor:any = e[campo];
+      const valor: any = e[campo];
       grupos[valor] = (grupos[valor] || 0) + 1;
     });
 
@@ -146,6 +368,24 @@ export class DashboardComponent implements OnInit {
     };
     this.aplicarFiltros();
   }
+
+  onProvinciaChange(event: Event): void {
+  const selectElement = event.target as HTMLSelectElement;
+  this.filtros.provincia = selectElement.value;
+  this.aplicarFiltros();
+}
+
+onFaseChange(event: Event): void {
+  const selectElement = event.target as HTMLSelectElement;
+  this.filtros.fase = selectElement.value;
+  this.aplicarFiltros();
+}
+
+onSectorChange(event: Event): void {
+  const selectElement = event.target as HTMLSelectElement;
+  this.filtros.sector = selectElement.value;
+  this.aplicarFiltros();
+}
 
   opcionesGraficoBarras(datos: any[]): echarts.EChartsOption {
     return {

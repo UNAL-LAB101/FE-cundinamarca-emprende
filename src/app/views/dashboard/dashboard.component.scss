@@ -1,37 +1,49 @@
+
+
+/* dashboard.component.scss */
 .dashboard-container {
   font-family: 'Roboto', sans-serif;
-  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
   color: #333;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
 
-  header {
-    margin-bottom: 30px;
-    text-align: center;
+header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e1e1e1;
 
-    h1 {
-      color: #2c3e50;
-      margin-bottom: 5px;
-    }
+  h1 {
+    color: #0d6efd;
+    font-size: 28px;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
 
-    .subtitle {
-      color: #7f8c8d;
-      font-size: 1.1rem;
-    }
+  .subtitle {
+    color: #6c757d;
+    font-size: 16px;
+    font-weight: 400;
   }
 }
 
+/* Sección de Filtros - Estilo similar al formulario */
 .filtros-section {
   background-color: #f8f9fa;
-  border-radius: 8px;
   padding: 20px;
+  border-radius: 8px;
   margin-bottom: 25px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 
   .filtros-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 15px;
     align-items: flex-end;
 
     .filtro {
@@ -42,41 +54,47 @@
         display: block;
         margin-bottom: 8px;
         font-weight: 500;
-        color: #34495e;
+        color: #495057;
+        font-size: 14px;
       }
 
       select {
         width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background-color: white;
+        padding: 10px 12px;
+        border: 1px solid #ced4da;
+        border-radius: 0.5rem;
+        background-color: #fff;
         font-size: 14px;
-        transition: border-color 0.3s;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
         &:focus {
-          outline: none;
-          border-color: #3498db;
+          border-color: #86b7fe;
+          outline: 0;
+          box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
         }
       }
     }
 
     .btn-limpiar {
       padding: 10px 15px;
-      background-color: #e74c3c;
+      background-color: #dc3545;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 0.5rem;
       cursor: pointer;
-      transition: background-color 0.3s;
+      font-weight: 500;
+      transition: all 0.3s ease;
 
       &:hover {
-        background-color: #c0392b;
+        background-color: #bb2d3b;
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(220, 53, 69, 0.15);
       }
     }
   }
 }
 
+/* Tarjetas de Resumen - Estilo similar a las cards del formulario */
 .resumen-section {
   display: flex;
   gap: 20px;
@@ -85,26 +103,35 @@
   .resumen-card {
     flex: 1;
     background: white;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
 
     h3 {
       margin-top: 0;
-      color: #7f8c8d;
+      color: #6c757d;
       font-size: 1.1rem;
+      font-weight: 500;
     }
 
     .numero-grande {
       font-size: 2.5rem;
       font-weight: bold;
-      color: #2c3e50;
+      color: #0d6efd;
       margin: 10px 0;
     }
   }
 }
 
+/* Sección de Gráficos - Cards con estilo similar */
 .graficos-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
@@ -113,14 +140,22 @@
 
   .grafico-card {
     background: white;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
 
     h3 {
       margin-top: 0;
       margin-bottom: 15px;
-      color: #2c3e50;
+      color: #0d6efd;
+      font-weight: 500;
     }
 
     .chart-container {
@@ -134,20 +169,26 @@
   }
 }
 
+/* Tabla de Emprendimientos - Estilo similar al formulario */
 .tabla-section {
   background: white;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  border: 1px solid rgba(0, 0, 0, 0.125);
   margin-bottom: 20px;
 
   h2 {
     margin-top: 0;
-    color: #2c3e50;
+    color: #0d6efd;
+    font-weight: 500;
+    margin-bottom: 20px;
   }
 
   .table-container {
     overflow-x: auto;
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
 
     table {
       width: 100%;
@@ -156,22 +197,25 @@
       th, td {
         padding: 12px 15px;
         text-align: left;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid #dee2e6;
       }
 
       th {
         background-color: #f8f9fa;
         font-weight: 500;
-        color: #34495e;
+        color: #495057;
+        position: sticky;
+        top: 0;
       }
 
       tr:hover {
-        background-color: #f5f5f5;
+        background-color: rgba(13, 110, 253, 0.05);
       }
     }
   }
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
   .graficos-section {
     grid-template-columns: 1fr;
@@ -183,5 +227,25 @@
 
   .filtros-container {
     flex-direction: column;
+    
+    .filtro {
+      min-width: 100%;
+    }
+  }
+  
+  .table-container {
+    table {
+      min-width: 600px;
+    }
+  }
+}
+
+/* Efectos de hover y transiciones */
+.card-effect {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   }
 }

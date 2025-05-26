@@ -6,11 +6,12 @@
 
   <section class="filtros-section">
     <div class="filtros-container">
-      <div class="filtro">
+      <div class="filtro" (mouseenter)="loadProvincias()">
         <label for="provincia">Provincia:</label>
-        <select id="provincia" [(ngModel)]="filtros.provincia" (change)="aplicarFiltros()">
+        <select id="provincia" [ngModel]="filtros.provincia" 
+                 (change)="onProvinciaChange($event)">
           <option value="">Todas las provincias</option>
-          <option *ngFor="let provincia of provincias" [value]="provincia">
+          <option *ngFor="let provincia of provincias; trackBy: trackByProvincia" [value]="provincia">
             {{provincia}}
           </option>
         </select>
@@ -18,23 +19,25 @@
 
       <div class="filtro">
         <label for="fase">Fase:</label>
-        <select id="fase" [(ngModel)]="filtros.fase" (change)="aplicarFiltros()">
+        <select id="fase" [ngModel]="filtros.fase" 
+                (change)="onSectorChange($event)">
           <option value="">Todas las fases</option>
-          <option *ngFor="let fase of fases" [value]="fase">
+          <option *ngFor="let fase of fases; trackBy: trackByFase" [value]="fase">
             {{fase}}
           </option>
         </select>
       </div>
 
-      <div class="filtro">
+  <!--     <div class="filtro" (mouseenter)="loadSectores()">
         <label for="sector">Sector:</label>
-        <select id="sector" [(ngModel)]="filtros.sector" (change)="aplicarFiltros()">
+        <select id="sector" [ngModel]="filtros.sector" 
+                (change)="filtros.sector = $event.target.value; aplicarFiltros()">
           <option value="">Todos los sectores</option>
-          <option *ngFor="let sector of sectores" [value]="sector">
+          <option *ngFor="let sector of sectores; trackBy: trackBySector" [value]="sector">
             {{sector}}
           </option>
         </select>
-      </div>
+      </div> -->
 
       <button class="btn-limpiar" (click)="limpiarFiltros()">Limpiar filtros</button>
     </div>
@@ -86,7 +89,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let emp of emprendimientosFiltrados">
+          <tr *ngFor="let emp of emprendimientosFiltrados; trackBy: trackByEmprendimiento">
             <td>{{emp.nombre}}</td>
             <td>{{emp.provincia}}</td>
             <td>{{emp.municipio}}</td>
@@ -99,5 +102,4 @@
       </table>
     </div>
   </section>
-  
 </div>

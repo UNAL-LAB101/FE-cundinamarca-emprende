@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 shadow">
+  <div class="container-fluid">
+    <!-- Logo/Marca a la izquierda -->
+    <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
+      <i class="bi bi-building me-2"></i>
+      <span>Cundinamarca Emprende</span>
+    </a>
+
+    <!-- Contenedor de botones a la derecha -->
+    <div class="d-flex ms-auto">
+      <!-- Botón Volver -->
+      <a class="btn btn-outline-light me-2 d-flex align-items-center" routerLink="/dashboardSelector">
+        <i class="bi bi-arrow-left me-1"></i>
+        <span class="d-none d-sm-inline">Volver</span>
+      </a>
+      
+      <!-- Botón Cerrar Sesión -->
+      <button class="btn btn-light d-flex align-items-center" >
+        <i class="bi bi-box-arrow-right me-1"></i>
+        <span class="d-none d-sm-inline" (click)="logout()">Cerrar sesión</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Contenido principal -->
+<div class="container-fluid mt-3">
+  <router-outlet></router-outlet>
+</div>

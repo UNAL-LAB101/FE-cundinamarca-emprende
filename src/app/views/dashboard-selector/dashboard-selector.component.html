@@ -1,0 +1,97 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 shadow">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#">Cundinamarca Emprende</a>
+    <button class="btn btn-light ms-auto" (click)="logout()">
+      <i class="bi bi-box-arrow-right me-1"></i>Cerrar sesión
+    </button>
+  </div>
+</nav>
+
+<div class="container bg-white p-4 rounded shadow">
+  <!-- Mensaje de bienvenida -->
+  <div class="text-center mb-5">
+    <h2 class="text-primary fw-bold">
+      <i class="bi bi-house-door me-2"></i>Portal de Gestión
+    </h2>
+    <p class="lead">Seleccione la opción que desea utilizar</p>
+  </div>
+
+  <!-- Tarjetas de opciones -->
+  <div class="row g-4">
+    <!-- Opción 1: Formulario -->
+    <div class="col-md-4">
+      <div class="card h-100 border-primary hover-shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-file-earmark-text me-2"></i>Formulario
+          </h4>
+        </div>
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3">
+            <i class="bi bi-file-text display-6 text-primary"></i>
+          </div>
+          <p>Acceda al formulario de caracterización para registrar información detallada de emprendimientos.</p>
+          <div class="mt-auto">
+            <button class="btn btn-primary w-100" (click)="navigateToForm()">
+              <i class="bi bi-arrow-right-circle me-1"></i>Ir al Formulario
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opción 2: Tablero de Control -->
+    <div class="col-md-4">
+      <div class="card h-100 border-success hover-shadow">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-speedometer2 me-2"></i>Tablero de Control
+          </h4>
+        </div>
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3">
+            <i class="bi bi-bar-chart-line display-6 text-success"></i>
+          </div>
+          <p>Visualice métricas y estadísticas de los emprendimientos registrados en el sistema.</p>
+          <div class="mt-auto">
+            <button class="btn btn-success w-100" (click)="navigateToDashboard()">
+              <i class="bi bi-arrow-right-circle me-1"></i>Ir al Tablero
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Opción 3: Redmine -->
+    <div class="col-md-4">
+      <div class="card h-100 border-warning hover-shadow">
+        <div class="card-header bg-warning text-dark">
+          <h4 class="mb-0">
+            <i class="bi bi-link-45deg me-2"></i>Redmine
+          </h4>
+        </div>
+        <div class="card-body d-flex flex-column">
+          <div class="mb-3">
+            <i class="bi bi-tools display-6 text-warning"></i>
+          </div>
+          <p>Acceda al sistema de gestión de proyectos Redmine para reportar incidencias o seguimiento de tareas.</p>
+          <div class="mt-auto">
+            <button class="btn btn-warning w-100" (click)="navigateToRedmine()">
+              <i class="bi bi-box-arrow-up-right me-1"></i>Ir a Redmine
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Información adicional -->
+  <div class="mt-5 pt-4 border-top">
+    <div class="alert alert-info">
+      <h5 class="alert-heading">
+        <i class="bi bi-info-circle-fill me-2"></i>Información importante
+      </h5>
+      <p>Recuerde que puede cambiar entre las diferentes opciones en cualquier momento usando el menú de navegación superior.</p>
+    </div>
+  </div>
+</div>

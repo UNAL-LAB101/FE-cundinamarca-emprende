@@ -1,1 +1,105 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <header>
+    <h1>Tablero de Control de Emprendimientos</h1>
+    <p class="subtitle">Visualización de indicadores estratégicos y analíticos</p>
+  </header>
+
+  <section class="filtros-section">
+    <div class="filtros-container">
+      <div class="filtro" (mouseenter)="loadProvincias()">
+        <label for="provincia">Provincia:</label>
+        <select id="provincia" [ngModel]="filtros.provincia" 
+                 (change)="onProvinciaChange($event)">
+          <option value="">Todas las provincias</option>
+          <option *ngFor="let provincia of provincias; trackBy: trackByProvincia" [value]="provincia">
+            {{provincia}}
+          </option>
+        </select>
+      </div>
+
+      <div class="filtro">
+        <label for="fase">Fase:</label>
+        <select id="fase" [ngModel]="filtros.fase" 
+                (change)="onSectorChange($event)">
+          <option value="">Todas las fases</option>
+          <option *ngFor="let fase of fases; trackBy: trackByFase" [value]="fase">
+            {{fase}}
+          </option>
+        </select>
+      </div>
+
+  <!--     <div class="filtro" (mouseenter)="loadSectores()">
+        <label for="sector">Sector:</label>
+        <select id="sector" [ngModel]="filtros.sector" 
+                (change)="filtros.sector = $event.target.value; aplicarFiltros()">
+          <option value="">Todos los sectores</option>
+          <option *ngFor="let sector of sectores; trackBy: trackBySector" [value]="sector">
+            {{sector}}
+          </option>
+        </select>
+      </div> -->
+
+      <button class="btn-limpiar" (click)="limpiarFiltros()">Limpiar filtros</button>
+    </div>
+  </section>
+
+  <section class="resumen-section">
+    <div class="resumen-card">
+      <h3>Total emprendimientos</h3>
+      <p class="numero-grande">{{emprendimientosFiltrados.length}}</p>
+    </div>
+
+    <div class="resumen-card">
+      <h3>Promedio evaluación</h3>
+      <p class="numero-grande">
+        {{calcularPromedioEvaluacion() | number:'1.1-1'}}
+      </p>
+    </div>
+  </section>
+
+  <section class="graficos-section">
+    <div class="grafico-card">
+      <h3>Distribución por Fase</h3>
+      <div class="chart-container">
+        <div echarts [options]="opcionesGraficoBarras(datosPorFase)" class="chart"></div>
+      </div>
+    </div>
+
+    <div class="grafico-card">
+      <h3>Distribución por Provincia</h3>
+      <div class="chart-container">
+        <div echarts [options]="opcionesGraficoPastel(datosPorProvincia)" class="chart"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tabla-section">
+    <h2>Detalle de Emprendimientos</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Provincia</th>
+            <th>Municipio</th>
+            <th>Fase</th>
+            <th>Sector</th>
+            <th>Evaluación</th>
+            <th>Nodo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of emprendimientosFiltrados; trackBy: trackByEmprendimiento">
+            <td>{{emp.nombre}}</td>
+            <td>{{emp.provincia}}</td>
+            <td>{{emp.municipio}}</td>
+            <td>{{emp.fase}}</td>
+            <td>{{emp.sector}}</td>
+            <td>{{emp.evaluacion}}</td>
+            <td>{{emp.nodo}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

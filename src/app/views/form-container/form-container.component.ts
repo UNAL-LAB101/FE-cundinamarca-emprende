@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 import { FormDataService } from '../../helpers/services/form-data-service.service';
 import { AuthService } from '../../helpers/services/auth-service.service';
 import { FormBuilder, FormGroup, FormArray, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { buildRedmineCustomFields } from '../../helpers/utils/redmine-utils';
 import { HttpClient } from '@angular/common/http';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-form-container',
@@ -45,13 +46,22 @@ export class FormContainerComponent implements OnInit {
   infrastructureTypeOptions = [
     'Propia', 'Arrendada', 'Familiar', 'Comodato'
   ];
+  sections = [
+  { id: 'basic-info', icon: 'bi-person-vcard', title: 'Información Básica' },
+  { id: 'contact-info', icon: 'bi-telephone', title: 'Contacto' },
+  { id: 'business-info', icon: 'bi-building', title: 'Negocio' },
+  { id: 'financial-info', icon: 'bi-cash-coin', title: 'Financiero' }
+];
 
   constructor(
     private formDataService: FormDataService,
     private authService: AuthService,
     private router: Router,
     private fb: FormBuilder,
-    private http: HttpClient
+    private http: HttpClient,
+    private route: ActivatedRoute,
+
+    private viewportScroller: ViewportScroller
   ) {
     this.form = this.fb.group({
       // Información Básica
@@ -107,16 +117,49 @@ export class FormContainerComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.formDataService.formData$.subscribe(data => {
-      this.form.patchValue(data);
-      this.updateFormArray('businessType', data.businessType || []);
-      this.updateFormArray('economicSector', data.economicSector || []);
-      this.updateFormArray('economicActivity', data.economicActivity || []);
-      this.updateFormArray('differentialFocus', data.differentialFocus || []);
-      this.updateFormArray('infrastructureType', data.infrastructureType || []);
-    });
+ngOnInit(): void {
+  this.formDataService.formData$.subscribe(data => {
+    this.form.patchValue(data);
+    this.updateFormArray('businessType', data.businessType || []);
+    this.updateFormArray('economicSector', data.economicSector || []);
+    this.updateFormArray('economicActivity', data.economicActivity || []);
+    this.updateFormArray('differentialFocus', data.differentialFocus || []);
+    this.updateFormArray('infrastructureType', data.infrastructureType || []);
+  });
+
+  this.route.fragment.subscribe(fragment => {
+    if (fragment) {
+      setTimeout(() => {
+        this.scrollTo(fragment);
+      }, 100);
+    }
+  });
+}
+
+ activeSection: string = 'basic-info';
+
+scrollTo(section: string) {
+  this.activeSection = section;
+  try {
+    const element = document.getElementById(section);
+    if (element) {
+      // Ajusta el offset según la altura de tu navbar (70px en este caso)
+      const yOffset = -70;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      
+      // Usa window.scrollTo en lugar de scrollIntoView para mejor control
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+      
+      // Actualiza la URL sin recargar (opcional)
+      history.replaceState(null, '', `${location.pathname}#${section}`);
+    }
+  } catch (e) {
+    console.error('Error al hacer scroll:', e);
   }
+}
 
   private updateFormArray(controlName: string, values: string[]): void {
     const formArray = this.form.get(controlName) as FormArray;
@@ -238,6 +281,7 @@ export class FormContainerComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['']);
   }
 
   private markAllAsTouched(): void {

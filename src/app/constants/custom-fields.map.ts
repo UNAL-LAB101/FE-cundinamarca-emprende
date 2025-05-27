@@ -12,7 +12,7 @@ export const redmineCustomFieldMap: { [key: string]: number } = {
   businessType: 24,
   economicSector: 25,
   economicActivity: 26,
-  membersCount: 27,
+  membersCount: 41,
   differentialMembers: 28,
   differentialFocus: 29,
   infrastructureType: 30,

@@ -180,21 +180,20 @@ scrollTo(section: string) {
     }
   }
 
-  async submitForm(): Promise<void> {
-    console.log("submitForm ejecutado");
-    this.submitted = true;
-    this.markAllAsTouched();
+ async submitForm(): Promise<void> {
+  console.log("submitForm ejecutado");
+  this.submitted = true;
+  this.markAllAsTouched();
 
-    if (this.form.valid) {
-      console.log("Formulario válido, enviando...");
-      try {
-        this.serverResponse = null;
-        this.form.disable();
+  if (this.form.valid) {
+    console.log("Formulario válido, enviando...");
+    this.serverResponse = null;
+    this.form.disable();
 
-        // 1. Construimos el arreglo de campos personalizados para Redmine
-        const customFields = buildRedmineCustomFields(this.form);
+    try {
+      const customFields = buildRedmineCustomFields(this.form);
+      console.log('campos personalizados:', customFields);
 
-            // 2. Armamos el payload para Redmine
       const payload = {
         issue: {
           project_id: 'solicitudes-pruebas',
@@ -205,25 +204,29 @@ scrollTo(section: string) {
         }
       };
 
+      console.log('Payload a enviar:', JSON.stringify(payload, null, 2));
 
-        // 3. Enviamos a Redmine
-        console.log('Payload a enviar:', JSON.stringify(payload, null, 2));
-        const response: any = await this.http.post('/api/issues.json', payload, {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Redmine-API-Key': '6ed8d5aab006fca6fc8526757f6f4927d87cca99'
-          }
-        })
-      }catch (error) {
-          console.error('Error al enviar a Redmine:', error);
-        this.serverResponse = {
-          success: false,
-          message: 'Error al enviar el formulario. Por favor intenta nuevamente.'
-        };
-        this.form.enable();
-      }
+      const response: any = await this.http.post('/api/issues.json', payload).toPromise();
+      console.log('Respuesta del servidor:', response);
+
+      this.serverResponse = {
+        success: true,
+        message: 'Formulario enviado correctamente.'
+      };
+      this.form.reset();
+    } catch (error) {
+      console.error('Error al enviar a Redmine:', error);
+      this.serverResponse = {
+        success: false,
+        message: 'Error al enviar el formulario. Por favor intenta nuevamente.'
+      };
+    } finally {
+      this.form.enable();
     }
   }
+}
+
+
   async submitForm2(): Promise<void> {
     this.submitted = true;
     this.markAllAsTouched();

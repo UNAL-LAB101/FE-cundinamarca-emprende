@@ -8,8 +8,7 @@
     <div class="filtros-container">
       <div class="filtro" (mouseenter)="loadProvincias()">
         <label for="provincia">Provincia:</label>
-        <select id="provincia" [ngModel]="filtros.provincia" 
-                 (change)="onProvinciaChange($event)">
+        <select id="provincia" [(ngModel)]="filtros.provincia" (ngModelChange)="aplicarFiltros()">
           <option value="">Todas las provincias</option>
           <option *ngFor="let provincia of provincias; trackBy: trackByProvincia" [value]="provincia">
             {{provincia}}
@@ -19,19 +18,17 @@
 
       <div class="filtro">
         <label for="fase">Fase:</label>
-        <select id="fase" [ngModel]="filtros.fase" 
-                (change)="onSectorChange($event)">
-          <option value="">Todas las fases</option>
-          <option *ngFor="let fase of fases; trackBy: trackByFase" [value]="fase">
-            {{fase}}
-          </option>
-        </select>
+        <select id="fase" [(ngModel)]="filtros.fase" (ngModelChange)="aplicarFiltros()">
+  <option value="">Todas las fases</option>
+  <option *ngFor="let fase of fases; trackBy: trackByFase" [value]="fase">
+    {{fase}}
+  </option>
+</select>
       </div>
 
       <div class="filtro" (mouseenter)="loadSectores()">
         <label for="sector">Sector:</label>
-        <select id="sector" [ngModel]="filtros.sector" 
-                (change)="onSectorChange($event)">
+        <select id="sector" [(ngModel)]="filtros.sector" (ngModelChange)="aplicarFiltros()">
           <option value="">Todos los sectores</option>
           <option *ngFor="let sector of sectores; trackBy: trackBySector" [value]="sector">
             {{sector}}

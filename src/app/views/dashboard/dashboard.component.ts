@@ -556,12 +556,13 @@ export class DashboardComponent implements OnInit {
     return emp.id;
   }
 
-  aplicarFiltros(): void {
-    this.emprendimientosFiltrados = this.emprendimientos.filter(e => {
-      return (!this.filtros.provincia || e.provincia === this.filtros.provincia) &&
-        (!this.filtros.fase || e.fase === this.filtros.fase) &&
-        (!this.filtros.sector || e.sector === this.filtros.sector);
-    });
+aplicarFiltros() {
+  this.emprendimientosFiltrados = this.emprendimientos.filter(emp => {
+    const coincideProvincia = !this.filtros.provincia || emp.provincia === this.filtros.provincia;
+    const coincideFase = !this.filtros.fase || emp.fase === this.filtros.fase;
+    const coincideSector = !this.filtros.sector || emp.sector === this.filtros.sector;
+    return coincideProvincia && coincideFase && coincideSector;
+  });
     this.actualizarDatosGraficos();
   }
 

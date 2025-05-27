@@ -10,8 +10,7 @@ export class AuthService {
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   //Usar proxy para evitar CORS
-  private apiUrl = '/api/users/current.json';
-  
+  private apiUrl = "http://ec2-34-200-104-165.compute-1.amazonaws.com:53427/"
 
   constructor(private http: HttpClient) {}
 

@@ -1,4 +1,4 @@
-/* {
+{
   "/api": {
     "target": "http://ec2-34-200-104-165.compute-1.amazonaws.com:53430",
     "secure": false,
@@ -8,4 +8,4 @@
     }
   }
 }
- */
+ 

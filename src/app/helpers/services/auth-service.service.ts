@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, of } from 'rxjs';
 
 @Injectable({
@@ -10,8 +10,8 @@ export class AuthService {
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   //Usar proxy para evitar CORS
-/*   private apiUrl = '/api/users/current.json'; */
-  private apiUrl = 'http://ec2-34-200-104-165.compute-1.amazonaws.com:53430/users/current.json';
+  private apiUrl = '/api/users/current.json';
+  
 
   constructor(private http: HttpClient) {}
 

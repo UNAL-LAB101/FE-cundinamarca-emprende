@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute,Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormDataService } from '../../helpers/services/form-data-service.service';
 import { AuthService } from '../../helpers/services/auth-service.service';
-import { FormBuilder, FormGroup, FormArray, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { buildRedmineCustomFields } from '../../helpers/utils/redmine-utils';
 import { HttpClient } from '@angular/common/http';
@@ -20,7 +20,7 @@ export class FormContainerComponent implements OnInit {
   submitted = false;
   serverResponse: { success: boolean, message: string } | null = null;
 
-  // Opciones para los campos de selección múltiple
+  // Opciones para los campos de selección
   businessTypeOptions = [
     'Asociación', 'Pre cooperativa', 'Cooperativa', 'Corporación',
     'Fundación', 'En Comandita', 'S.A', 'EAT', 'S.A.S', 'LTDA',
@@ -46,12 +46,15 @@ export class FormContainerComponent implements OnInit {
   infrastructureTypeOptions = [
     'Propia', 'Arrendada', 'Familiar', 'Comodato'
   ];
+
   sections = [
-  { id: 'basic-info', icon: 'bi-person-vcard', title: 'Información Básica' },
-  { id: 'contact-info', icon: 'bi-telephone', title: 'Contacto' },
-  { id: 'business-info', icon: 'bi-building', title: 'Negocio' },
-  { id: 'financial-info', icon: 'bi-cash-coin', title: 'Financiero' }
-];
+    { id: 'basic-info', icon: 'bi-person-vcard', title: 'Información Básica' },
+    { id: 'contact-info', icon: 'bi-telephone', title: 'Contacto' },
+    { id: 'business-info', icon: 'bi-building', title: 'Negocio' },
+    { id: 'financial-info', icon: 'bi-cash-coin', title: 'Financiero' }
+  ];
+
+  activeSection: string = 'basic-info';
 
   constructor(
     private formDataService: FormDataService,
@@ -60,7 +63,6 @@ export class FormContainerComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private route: ActivatedRoute,
-
     private viewportScroller: ViewportScroller
   ) {
     this.form = this.fb.group({
@@ -78,30 +80,30 @@ export class FormContainerComponent implements OnInit {
       gender: ['', [Validators.required]],
 
       // Tipo de Emprendimiento
-      businessType: this.fb.array([], [Validators.required]),
+      businessType: ['', [Validators.required]],
       otherBusinessType: [''],
 
       // Actividad Económica
-      economicSector: this.fb.array([], [Validators.required]),
+      economicSector: ['', [Validators.required]],
       otherEconomicSector: [''],
-      economicActivity: this.fb.array([], [Validators.required]),
+      economicActivity: ['', [Validators.required]],
       otherEconomicActivity: [''],
 
       // Información de Socios/Afiliados
       membersCount: ['', [Validators.required, Validators.min(0)]],
       differentialMembers: ['', [Validators.min(0)]],
-      differentialFocus: this.fb.array([]),
+      differentialFocus: [''],
       otherDifferentialFocus: [''],
 
       // Infraestructura e Instalaciones
-      infrastructureType: this.fb.array([], [Validators.required]),
+      infrastructureType: ['', [Validators.required]],
       area: ['', [Validators.min(0)]],
-      hasPublicPartners: [false],
-      publicPartners: [''],
-      hasPrivatePartners: [false],
-      privatePartners: [''],
-      hasMixedPartners: [false],
-      mixedPartners: [''],
+
+      // Aliados Comerciales
+      commercialPartners: [''],
+      publicPartnersDetails: [''],
+      privatePartnersDetails: [''],
+      mixedPartnersDetails: [''],
 
       // Información Financiera
       workingCapital: ['', [Validators.min(0)]],
@@ -117,152 +119,78 @@ export class FormContainerComponent implements OnInit {
     });
   }
 
-ngOnInit(): void {
-  this.formDataService.formData$.subscribe(data => {
-    this.form.patchValue(data);
-    this.updateFormArray('businessType', data.businessType || []);
-    this.updateFormArray('economicSector', data.economicSector || []);
-    this.updateFormArray('economicActivity', data.economicActivity || []);
-    this.updateFormArray('differentialFocus', data.differentialFocus || []);
-    this.updateFormArray('infrastructureType', data.infrastructureType || []);
-  });
-
-  this.route.fragment.subscribe(fragment => {
-    if (fragment) {
-      setTimeout(() => {
-        this.scrollTo(fragment);
-      }, 100);
-    }
-  });
-}
-
- activeSection: string = 'basic-info';
-
-scrollTo(section: string) {
-  this.activeSection = section;
-  try {
-    const element = document.getElementById(section);
-    if (element) {
-      // Ajusta el offset según la altura de tu navbar (70px en este caso)
-      const yOffset = -70;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      
-      // Usa window.scrollTo en lugar de scrollIntoView para mejor control
-      window.scrollTo({
-        top: y,
-        behavior: 'smooth'
-      });
-      
-      // Actualiza la URL sin recargar (opcional)
-      history.replaceState(null, '', `${location.pathname}#${section}`);
-    }
-  } catch (e) {
-    console.error('Error al hacer scroll:', e);
-  }
-}
-
-  private updateFormArray(controlName: string, values: string[]): void {
-    const formArray = this.form.get(controlName) as FormArray;
-    formArray.clear();
-    values.forEach(value => formArray.push(new FormControl(value)));
-  }
-
-  onCheckboxChange(event: Event, controlName: string, value: string): void {
-    const formArray = this.form.get(controlName) as FormArray;
-    const target = event.target as HTMLInputElement;
-    if (target.checked) {
-      formArray.push(new FormControl(value));
-    } else {
-      const index = formArray.controls.findIndex(x => x.value === value);
-      if (index >= 0) {
-        formArray.removeAt(index);
+  ngOnInit(): void {
+    this.formDataService.formData$.subscribe(data => {
+      if (data) {
+        this.form.patchValue(data);
       }
-    }
+    });
+
+    this.route.fragment.subscribe(fragment => {
+      if (fragment) {
+        setTimeout(() => {
+          this.scrollTo(fragment);
+        }, 100);
+      }
+    });
   }
 
- async submitForm(): Promise<void> {
-  console.log("submitForm ejecutado");
-  this.submitted = true;
-  this.markAllAsTouched();
-
-  if (this.form.valid) {
-    console.log("Formulario válido, enviando...");
-    this.serverResponse = null;
-    this.form.disable();
-
+  scrollTo(section: string) {
+    this.activeSection = section;
     try {
-      const customFields = buildRedmineCustomFields(this.form);
-      console.log('campos personalizados:', customFields);
-
-      const payload = {
-        issue: {
-          project_id: 'solicitudes-pruebas',
-          tracker_id: 10,
-          subject: this.form.get('companyName')?.value || 'Solicitud sin nombre de empresa',
-          description: 'Esta es una solicitud enviada desde el formulario del frontend.',
-          custom_fields: customFields
-        }
-      };
-
-      console.log('Payload a enviar:', JSON.stringify(payload, null, 2));
-
-      const response: any = await this.http.post('/api/issues.json', payload).toPromise();
-      console.log('Respuesta del servidor:', response);
-
-      this.serverResponse = {
-        success: true,
-        message: 'Formulario enviado correctamente.'
-      };
-      this.form.reset();
-    } catch (error) {
-      console.error('Error al enviar a Redmine:', error);
-      this.serverResponse = {
-        success: false,
-        message: 'Error al enviar el formulario. Por favor intenta nuevamente.'
-      };
-    } finally {
-      this.form.enable();
+      const element = document.getElementById(section);
+      if (element) {
+        const yOffset = -70;
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+        });
+        history.replaceState(null, '', `${location.pathname}#${section}`);
+      }
+    } catch (e) {
+      console.error('Error al hacer scroll:', e);
     }
   }
-}
 
-
-  async submitForm2(): Promise<void> {
+  async submitForm(): Promise<void> {
     this.submitted = true;
     this.markAllAsTouched();
 
     if (this.form.valid) {
+      this.serverResponse = null;
+      this.form.disable();
+
       try {
-        // Simular envío al servidor
-        this.serverResponse = null;
-        this.form.disable();
-
-        // Simular delay de red
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        // Simular respuesta exitosa
-        this.serverResponse = {
-          success: true,
-          message: 'Formulario enviado con éxito. Gracias por tu información.'
+        const customFields = buildRedmineCustomFields(this.form);
+        
+        const payload = {
+          issue: {
+            project_id: 'solicitudes-pruebas',
+            tracker_id: 10,
+            subject: this.form.get('companyName')?.value || 'Solicitud sin nombre de empresa',
+            description: 'Esta es una solicitud enviada desde el formulario del frontend.',
+            custom_fields: customFields
+          }
         };
 
+        const response: any = await this.http.post('/api/issues.json', payload).toPromise();
+        
+        this.serverResponse = {
+          success: true,
+          message: 'Formulario enviado correctamente.'
+        };
+        
         // Guardar datos en el servicio
         this.formDataService.updateFormData(this.form.value);
-        this.formDataService.submitFormData();
-        console.log(this.form.getRawValue())
-        debugger
-        buildRedmineCustomFields(this.form.getRawValue());
-        // Resetear formulario después de 3 segundos
-        setTimeout(() => {
-          this.resetForm();
-          this.submitted = false;
-          this.serverResponse = null;
-        }, 3000);
+        this.form.reset();
       } catch (error) {
+        console.error('Error al enviar a Redmine:', error);
         this.serverResponse = {
           success: false,
           message: 'Error al enviar el formulario. Por favor intenta nuevamente.'
         };
+      } finally {
         this.form.enable();
       }
     } else {
@@ -273,9 +201,6 @@ scrollTo(section: string) {
   resetForm(): void {
     if (confirm('¿Estás seguro que deseas limpiar todo el formulario?')) {
       this.form.reset();
-      ['businessType', 'economicSector', 'economicActivity', 'differentialFocus', 'infrastructureType'].forEach(
-        controlName => (this.form.get(controlName) as FormArray).clear()
-      );
       this.formDataService.resetFormData();
       this.submitted = false;
       this.serverResponse = null;
@@ -289,13 +214,7 @@ scrollTo(section: string) {
 
   private markAllAsTouched(): void {
     Object.values(this.form.controls).forEach(control => {
-      if (control instanceof FormGroup) {
-        Object.values(control.controls).forEach(c => c.markAsTouched());
-      } else if (control instanceof FormArray) {
-        control.controls.forEach(c => c.markAsTouched());
-      } else {
-        control.markAsTouched();
-      }
+      control.markAsTouched();
     });
   }
 
@@ -303,7 +222,6 @@ scrollTo(section: string) {
     const firstInvalidControl = document.querySelector('.ng-invalid');
     if (firstInvalidControl) {
       firstInvalidControl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      // Agregar clase de error temporal
       firstInvalidControl.classList.add('highlight-error');
       setTimeout(() => {
         firstInvalidControl.classList.remove('highlight-error');
@@ -329,21 +247,8 @@ scrollTo(section: string) {
     return null;
   }
 
-  getArrayError(arrayName: string): string | null {
-    const array = this.form.get(arrayName) as FormArray;
-    if (array?.errors && (array.touched || this.submitted)) {
-      if (array.errors['required']) {
-        return 'Seleccione al menos una opción';
-      }
-    }
-    return null;
+  // Método de conveniencia para acceder a los controles del formulario
+  get f() { 
+    return this.form.controls; 
   }
-
-  // Métodos de conveniencia para acceder a los controles del formulario
-  get f() { return this.form.controls; }
-  get businessTypeArray() { return this.form.get('businessType') as FormArray; }
-  get economicSectorArray() { return this.form.get('economicSector') as FormArray; }
-  get economicActivityArray() { return this.form.get('economicActivity') as FormArray; }
-  get differentialFocusArray() { return this.form.get('differentialFocus') as FormArray; }
-  get infrastructureTypeArray() { return this.form.get('infrastructureType') as FormArray; }
 }

@@ -1,5 +1,4 @@
 <div class="container bg-white p-4 rounded shadow">
-  <!-- Mensaje de respuesta del servidor -->
   <div *ngIf="serverResponse" class="alert alert-dismissible fade show"
     [ngClass]="serverResponse.success ? 'alert-success' : 'alert-danger'">
     {{serverResponse.message}}
@@ -11,19 +10,16 @@
   </h2>
 
   <form [formGroup]="form" (ngSubmit)="submitForm()" class="needs-validation" novalidate>
-    <!-- Progress Steps -->
-<div class="mb-5">
-  <ul class="nav nav-pills nav-justified">
-    <li class="nav-item" *ngFor="let section of sections">
-      <a class="nav-link"
-         [ngClass]="{'active': activeSection === section.id}"
-         href="javascript:void(0)"
-         (click)="scrollTo(section.id); $event.preventDefault()">  <!-- Previene comportamiento por defecto -->
-        <i class="bi {{section.icon}} me-1"></i> {{section.title}}
-      </a>
-    </li>
-  </ul>
-</div>
+    <div class="mb-5">
+      <ul class="nav nav-pills nav-justified">
+        <li class="nav-item" *ngFor="let section of sections">
+          <a class="nav-link" [ngClass]="{'active': activeSection === section.id}" href="javascript:void(0)"
+            (click)="scrollTo(section.id); $event.preventDefault()">
+            <i class="bi {{section.icon}} me-1"></i> {{section.title}}
+          </a>
+        </li>
+      </ul>
+    </div>
 
     <!-- Basic Information Section -->
     <div class="form-section mb-5" id="basic-info">
@@ -155,19 +151,18 @@
             <div class="row">
               <div class="col-md-4 mb-2" *ngFor="let option of businessTypeOptions">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [value]="option"
-                    (change)="onCheckboxChange($event, 'businessType', option)"
-                    [checked]="businessTypeArray.value.includes(option)" id="bt-{{option}}">
+                  <input class="form-check-input" type="radio" [value]="option" formControlName="businessType"
+                    id="bt-{{option}}">
                   <label class="form-check-label" for="bt-{{option}}">
                     {{option}}
                   </label>
                 </div>
               </div>
             </div>
-            <div *ngIf="submitted && businessTypeArray.errors" class="text-danger small">
-              {{ getArrayError('businessType') }}
+            <div *ngIf="submitted && f['businessType'].errors" class="text-danger small">
+              {{ getFieldError('businessType') }}
             </div>
-            <div *ngIf="businessTypeArray.value.includes('Otra')" class="mt-3">
+            <div *ngIf="f['businessType'].value === 'Otra'" class="mt-3">
               <input type="text" class="form-control" placeholder="¿Cuál?" formControlName="otherBusinessType">
             </div>
           </div>
@@ -189,19 +184,18 @@
             <div class="row">
               <div class="col-md-4 mb-2" *ngFor="let option of economicSectorOptions">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [value]="option"
-                    (change)="onCheckboxChange($event, 'economicSector', option)"
-                    [checked]="economicSectorArray.value.includes(option)" id="es-{{option}}">
+                  <input class="form-check-input" type="radio" [value]="option" formControlName="economicSector"
+                    id="es-{{option}}">
                   <label class="form-check-label" for="es-{{option}}">
                     {{option}}
                   </label>
                 </div>
               </div>
             </div>
-            <div *ngIf="submitted && economicSectorArray.errors" class="text-danger small">
-              {{ getArrayError('economicSector') }}
+            <div *ngIf="submitted && f['economicSector'].errors" class="text-danger small">
+              {{ getFieldError('economicSector') }}
             </div>
-            <div *ngIf="economicSectorArray.value.includes('Otra')" class="mt-3">
+            <div *ngIf="f['economicSector'].value === 'Otra'" class="mt-3">
               <input type="text" class="form-control" placeholder="¿Cuál?" formControlName="otherEconomicSector">
             </div>
           </div>
@@ -211,19 +205,18 @@
             <div class="row">
               <div class="col-md-4 mb-2" *ngFor="let option of economicActivityOptions">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [value]="option"
-                    (change)="onCheckboxChange($event, 'economicActivity', option)"
-                    [checked]="economicActivityArray.value.includes(option)" id="ea-{{option}}">
+                  <input class="form-check-input" type="radio" [value]="option" formControlName="economicActivity"
+                    id="ea-{{option}}">
                   <label class="form-check-label" for="ea-{{option}}">
                     {{option}}
                   </label>
                 </div>
               </div>
             </div>
-            <div *ngIf="submitted && economicActivityArray.errors" class="text-danger small">
-              {{ getArrayError('economicActivity') }}
+            <div *ngIf="submitted && f['economicActivity'].errors" class="text-danger small">
+              {{ getFieldError('economicActivity') }}
             </div>
-            <div *ngIf="economicActivityArray.value.includes('Otra')" class="mt-3">
+            <div *ngIf="f['economicActivity'].value === 'Otra'" class="mt-3">
               <input type="text" class="form-control" placeholder="¿Cuál?" formControlName="otherEconomicActivity">
             </div>
           </div>
@@ -263,16 +256,15 @@
             <div class="row">
               <div class="col-md-4 mb-2" *ngFor="let option of differentialFocusOptions">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [value]="option"
-                    (change)="onCheckboxChange($event, 'differentialFocus', option)"
-                    [checked]="differentialFocusArray.value.includes(option)" id="df-{{option}}">
+                  <input class="form-check-input" type="radio" [value]="option" formControlName="differentialFocus"
+                    id="df-{{option}}">
                   <label class="form-check-label" for="df-{{option}}">
                     {{option}}
                   </label>
                 </div>
               </div>
             </div>
-            <div *ngIf="differentialFocusArray.value.includes('Otra')" class="mt-3">
+            <div *ngIf="f['differentialFocus'].value === 'Otra'" class="mt-3">
               <input type="text" class="form-control" placeholder="¿Cuál?" formControlName="otherDifferentialFocus">
             </div>
           </div>
@@ -294,17 +286,16 @@
             <div class="row">
               <div class="col-md-3 mb-2" *ngFor="let option of infrastructureTypeOptions">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" [value]="option"
-                    (change)="onCheckboxChange($event, 'infrastructureType', option)"
-                    [checked]="infrastructureTypeArray.value.includes(option)" id="it-{{option}}">
+                  <input class="form-check-input" type="radio" [value]="option" formControlName="infrastructureType"
+                    id="it-{{option}}">
                   <label class="form-check-label" for="it-{{option}}">
                     {{option}}
                   </label>
                 </div>
               </div>
             </div>
-            <div *ngIf="submitted && infrastructureTypeArray.errors" class="text-danger small">
-              {{ getArrayError('infrastructureType') }}
+            <div *ngIf="submitted && f['infrastructureType'].errors" class="text-danger small">
+              {{ getFieldError('infrastructureType') }}
             </div>
             <div class="mt-3 col-md-4">
               <label for="area" class="form-label">Área (m²):</label>
@@ -317,45 +308,60 @@
           </div>
 
           <!-- Nueva sección de Aliados Comerciales -->
+          <!-- Aliados Comerciales - Versión con selección única -->
           <div class="mb-3">
             <label class="form-label">Aliados comerciales:</label>
 
+            <div class="mb-3">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="noPartners" value=""
+                  formControlName="commercialPartners" [checked]="!f['commercialPartners'].value">
+                <label class="form-check-label fw-bold" for="noPartners">
+                  Ninguno
+                </label>
+              </div>
+            </div>
+
             <!-- Públicos -->
             <div class="mb-3">
-              <div class="d-flex align-items-center mb-2">
-                <div class="form-check me-3">
-                  <input class="form-check-input" type="checkbox" id="hasPublicPartners"
-                    formControlName="hasPublicPartners">
-                  <label class="form-check-label fw-bold" for="hasPublicPartners">Públicos</label>
-                </div>
-                <input *ngIf="f['hasPublicPartners'].value" type="text" class="form-control w-50"
-                  placeholder="¿Cuáles? Ej: Venta Directa" formControlName="publicPartners">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="publicPartners" value="public"
+                  formControlName="commercialPartners">
+                <label class="form-check-label fw-bold" for="publicPartners">
+                  Públicos
+                </label>
+              </div>
+              <div *ngIf="f['commercialPartners'].value === 'public'" class="mt-2 ms-4">
+                <input type="text" class="form-control" placeholder="¿Cuáles? Ej: Venta Directa"
+                  formControlName="publicPartnersDetails">
               </div>
             </div>
 
             <!-- Privados -->
             <div class="mb-3">
-              <div class="d-flex align-items-center mb-2">
-                <div class="form-check me-3">
-                  <input class="form-check-input" type="checkbox" id="hasPrivatePartners"
-                    formControlName="hasPrivatePartners">
-                  <label class="form-check-label fw-bold" for="hasPrivatePartners">Privados</label>
-                </div>
-                <input *ngIf="f['hasPrivatePartners'].value" type="text" class="form-control w-50"
-                  placeholder="¿Cuáles?" formControlName="privatePartners">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="privatePartners" value="private"
+                  formControlName="commercialPartners">
+                <label class="form-check-label fw-bold" for="privatePartners">
+                  Privados
+                </label>
+              </div>
+              <div *ngIf="f['commercialPartners'].value === 'private'" class="mt-2 ms-4">
+                <input type="text" class="form-control" placeholder="¿Cuáles?" formControlName="privatePartnersDetails">
               </div>
             </div>
 
             <!-- Mixto -->
             <div class="mb-3">
-              <div class="d-flex align-items-center mb-2">
-                <div class="form-check me-3">
-                  <input class="form-check-input" type="checkbox" id="hasMixedPartners"
-                    formControlName="hasMixedPartners">
-                  <label class="form-check-label fw-bold" for="hasMixedPartners">Mixto</label>
-                </div>
-                <input *ngIf="f['hasMixedPartners'].value" type="text" class="form-control w-50" placeholder="¿Cuáles?"
-                  formControlName="mixedPartners">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" id="mixedPartners" value="mixed"
+                  formControlName="commercialPartners">
+                <label class="form-check-label fw-bold" for="mixedPartners">
+                  Mixto
+                </label>
+              </div>
+              <div *ngIf="f['commercialPartners'].value === 'mixed'" class="mt-2 ms-4">
+                <input type="text" class="form-control" placeholder="¿Cuáles?" formControlName="mixedPartnersDetails">
               </div>
             </div>
           </div>
